@@ -45,12 +45,13 @@ export default class Handler {
       startfn = startfn.then(() => {
         let def = q.defer();
         if(store.length) {
+          const store_url = store[0].indexOf("http") > -1 ? store[0] : `http://${store[0]}`
           let test = {
             name: `test logo vtex on ${key}`,
             description: `testando se o logo está na página`,
             user: 'vtex',
             context: {
-              url: store[0]
+              url: store_url
             },
             actions: [],
             asserts: [{
@@ -69,9 +70,9 @@ export default class Handler {
             let scheduleToSave = {
               active: true,
               user: 'vtex',
-              testId: resp,
+              testId: resp.insertedIds[1].toString(),
               scheduleDate: new Date(),
-              period: 30
+              period: 60
             };
 
             this[scheduleRepo].save(scheduleToSave).then((resp) => {
